@@ -15,6 +15,6 @@ git push origin main --follow-tags
 
 ## Major tag updates
 
-The repository includes a workflow that moves the matching major tag when a semantic version tag is pushed.
+The repository delegates major tag updates to the reusable workflow in `Makepad-fr/action-update-major-tag`.
 
-For example, pushing `v1.2.3` updates `v1` to point at the same commit. That lets workflows pin to `@v1` while you continue publishing patch and minor releases.
+For example, pushing `v1.2.3` updates `v1` to point at the same commit. That lets workflows pin to `@v1` while you continue publishing patch and minor releases without duplicating the tag-update logic in this repository.
