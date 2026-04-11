@@ -1,0 +1,26 @@
+name: Docker Context Switch
+author: Makepad
+description: Create a Docker context targeting a remote host over SSH, switch to it, and clean it up after the job.
+branding:
+  icon: box
+  color: blue
+inputs:
+  environment:
+    description: Deployment environment name
+    required: true
+  server_ip_address:
+    description: Server IP or hostname for the Docker SSH endpoint
+    required: true
+  server_ssh_user:
+    description: SSH user for the remote Docker host
+    required: true
+  context_name:
+    description: Docker context name to create and use
+    required: true
+outputs:
+  context_name:
+    description: Name of the created Docker context
+runs:
+  using: node24
+  main: index.js
+  post: post.js
