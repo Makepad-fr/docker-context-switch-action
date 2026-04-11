@@ -9,40 +9,5 @@ permissions:
   contents: write
 
 jobs:
-  move-major-tag:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Validate semver tag and compute major tag
-        id: semver
-        env:
-          TAG: ${{ github.ref_name }}
-        run: |
-          echo "Pushed tag: $TAG"
-          if [[ "$TAG" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
-            echo "is_semver=true" >> "$GITHUB_OUTPUT"
-            echo "major=v${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
-          else
-            echo "Not a strict semver tag (vX.Y.Z). Skipping."
-            echo "is_semver=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Check out full history and tags
-        if: steps.semver.outputs.is_semver == 'true'
-        uses: actions/checkout@v5
-
-      - name: Configure git identity for tagging
-        if: steps.semver.outputs.is_semver == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Move major tag to this commit
-        if: steps.semver.outputs.is_semver == 'true'
-        env:
-          MAJOR: ${{ steps.semver.outputs.major }}
-          TAG: ${{ github.ref_name }}
-          SHA: ${{ github.sha }}
-        run: |
-          git tag -fa "$MAJOR" -m "Update $MAJOR to point to $TAG" "$SHA"
-          git push origin "refs/tags/$MAJOR" --force
+  update-major-tag:
+    uses: Makepad-fr/action-update-major-tag/.github/workflows/update-major-tag.yml@v1
